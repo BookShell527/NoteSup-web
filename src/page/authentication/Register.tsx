@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,11 +9,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Copyright from "../../components/Copyright"
-import { Link, useHistory } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { useContext } from 'react';
 import { context } from '../../context/context';
-
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -54,26 +53,41 @@ const useStyles = makeStyles((theme) => ({
     notchedOutline: {
         borderWidth: '1px',
     },
+    centerAlign: {
+        textAlign: "center",
+        color: "red"
+    }
 }));
 
 export default function SignIn() {
     const classes = useStyles();
-    const { register }  = useContext(context); 
-    const history = useHistory();
+    const { register, currentUser }  = useContext(context); 
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
 
+    useEffect(() => {
+        if (currentUser !== null) {
+            window.location.href = "/";
+        }
+    })
+
     const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
+            if (password.length < 6) {
+                setError("Password must be 6+ character");
+                return;
+            }
+
             setError("");
             setLoading(true);
             await register(email, password);
-            history.push("/");
+            window.location.href = "/";
         } catch {
+            setLoading(false);
             setError("Failed Registering User");
         }
     }
@@ -137,11 +151,11 @@ export default function SignIn() {
                             inputMode: "numeric"
                         }}
                     />
-                    {error && <h1>{error}</h1>}
+                    {error && <h4 className={classes.centerAlign}>{error}</h4>}
                     <Button className={classes.submit} disabled={loading} type="submit" fullWidth variant="contained" color="primary">Sign In</Button>
                     <Grid container>
                         <Grid item>
-                            <Link to="/login" className={classes.link}>{"Already have an account? Login!"}</Link>
+                            <Link href="/login" className={classes.link}>{"Already have an account? Login!"}</Link>
                         </Grid>
                     </Grid>
                 </form>
