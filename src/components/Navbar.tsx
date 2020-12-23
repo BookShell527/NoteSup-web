@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Link } from 'react-router-dom';
+import Link from "@material-ui/core/Link";
 import SwipeableDrawer from '@material-ui/core/Drawer';
 import DrawerList from './DrawerList';
 import { context } from "../context/context";
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
         color: "white"
     },
     titleLink: {
-        textDecoration: "none",
-        color: "white"
+        textDecoration: "none !important",
+        color: "white",
     },
     root: {
         background: "purple"
@@ -59,7 +59,7 @@ const Navbar = () => {
                         {<DrawerList anchor="left" />}
                     </SwipeableDrawer>
                     <Typography variant="h6" className={classes.title}>
-                        <Link to="/" className={classes.titleLink} >NoteSup</Link>
+                        <Link href="/" className={classes.titleLink} >NoteSup</Link>
                     </Typography>
                 </Toolbar>
             </AppBar>
