@@ -63,7 +63,7 @@ const DrawerList: FC<Parameter> = ({ anchor }) => {
                     <Avatar className={classes.avatar} >
                         <AccountCircleIcon />
                     </Avatar> :
-                    <Avatar src={currentUser.photoURL} />
+                    <Avatar className={classes.avatar} src={currentUser.photoURL} />
             }
             <Divider />
             <List>

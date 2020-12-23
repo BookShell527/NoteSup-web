@@ -12,6 +12,7 @@ import Copyright from "../../components/Copyright"
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { context } from "../../context/context";
+import GoogleButton from 'react-google-button';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -38,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: 80
     },
+    grid: {
+        marginTop: 10
+    },
     link: {
         textDecoration: "none"
     },
@@ -55,12 +59,15 @@ const useStyles = makeStyles((theme) => ({
     centerAlign: {
         textAlign: "center",
         color: "red"
+    },
+    google: {
+        margin: "auto"
     }
 }));
 
 export default function SignIn() {
     const classes = useStyles();
-    const { login, currentUser }  = useContext(context); 
+    const { login, currentUser, loginGoogle }  = useContext(context); 
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
@@ -81,6 +88,17 @@ export default function SignIn() {
             await login(email, password);
             window.location.href = "/";
         } catch {
+            setLoading(false);
+            setError("Failed to login");
+        }
+    }
+
+    const handleLoginGoogle = async () => {
+        try {
+            setError("");
+            setLoading(true);
+            await loginGoogle();
+        } catch (error) {
             setLoading(false);
             setError("Failed to login");
         }
@@ -147,7 +165,11 @@ export default function SignIn() {
                     />
                     {error && <h4 className={classes.centerAlign}>{error}</h4>}
                     <Button className={classes.submit} type="submit" disabled={loading} fullWidth variant="contained" color="primary">Sign In</Button>
-                    <Grid container>
+                    <GoogleButton
+                        className={classes.google}
+                        onClick={handleLoginGoogle}
+                    />
+                    <Grid container className={classes.grid} >
                         <Grid item>
                             <Link href="/register" className={classes.link} >{"Don't have an account? Register!"}</Link>
                         </Grid>

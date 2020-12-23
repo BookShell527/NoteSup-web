@@ -1,5 +1,6 @@
-import React, { useState, useEffect, createContext, FC, Context } from "react"
-import { auth } from "../firebase"
+import React, { useState, useEffect, createContext, FC, Context } from "react";
+import { auth } from "../firebase";
+import firebase from "firebase";
 
 export const context: Context<any> = createContext(null);
 
@@ -23,6 +24,15 @@ export const ContextProvider: FC<ContextParameter> = ({ children }) => {
         return auth.signOut();
     }
 
+    const loginGoogle = () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then((result) => {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+        });
+    }
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user: any) => {
             setCurrentUser(user);
@@ -38,7 +48,8 @@ export const ContextProvider: FC<ContextParameter> = ({ children }) => {
             loading,
             login,
             signOut,
-            register
+            register,
+            loginGoogle
         }}>
             { !loading && children }
         </context.Provider>
