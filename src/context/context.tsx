@@ -34,20 +34,39 @@ export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
         await noteCollection.doc(docId).update({ important: !important });
     }
 
+    const toggleInTrash = async (docId: string, inTrash: boolean) => {
+        await noteCollection.doc(docId).update({ inTrash: !inTrash });
+    }
+
     const toggleArchived = async (docId: string, archived: boolean) => {
         await noteCollection.doc(docId).update({ archived: !archived });
     }
 
-    const addNote = async (uid: string, title: string, body: string, color: number) => {
+    const deleteNote = async (docId: string) => {
+        await noteCollection.doc(docId).delete();
+    }
+
+    const deleteAllNote = async () => {
+        await noteCollection.where("uid", "==", currentUser.uid).where("inTrash", "==", true).get().then((qSnap) => {
+            const batch = firestore.batch();
+
+            qSnap.forEach((m) => {
+                batch.delete(m.ref);
+            });
+
+            return batch.commit();
+        })
+    }
+
+    const addNote = async (title: string, body: string, color: number) => {
         await noteCollection.doc().set({
-            uid,
+            uid: currentUser.uid,
             title,
             body,
             color,
             important: false,
             inTrash: false,
             archived: false,
-            createdDate: Date.now()
         })
     }
 
@@ -76,7 +95,10 @@ export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
             toggleImportant,
             addNote,
             sendMessage,
-            toggleArchived
+            toggleArchived,
+            toggleInTrash,
+            deleteNote,
+            deleteAllNote
         }}>
             { !loading && children }
         </context.Provider>

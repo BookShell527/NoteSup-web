@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,6 +12,8 @@ import { context } from "../context/context";
 import AddIcon from '@material-ui/icons/Add';
 import { useLocation } from 'react-router-dom';
 import AddNoteDialog from "./AddNoteDialog";
+import { firestore } from "../firebase";
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -31,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     },
     addButton: {
         color: "white"
+    },
+    deleteAllButton: {
+        color: "red"
     }
 }));
 
@@ -39,9 +44,23 @@ type Anchor = "left"
 const Navbar = () => {
     const classes = useStyles();
     const [state, setState] = useState({left: false});
-    const { currentUser } = useContext(context);
+    const { currentUser, deleteAllNote } = useContext(context);
     const [open, setOpen] = useState(false);
     const location = useLocation();
+    const noteCollection = firestore.collection("note");
+    const [note, setNote] = useState([]) as any;
+
+    useEffect(() => {
+        const unsub = noteCollection.where("inTrash", "==", true).onSnapshot(snap => {
+            let documents: any[] = [];
+            snap.forEach((doc: any) => {
+                documents.push({ ...doc.data(), id: doc.id });
+            });
+            setNote(documents);
+        });
+        return () => unsub();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const toggleDrawer = (anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (event && event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
@@ -49,6 +68,24 @@ const Navbar = () => {
         }
         setState({ ...state, [anchor]: open });
     };
+
+    const handleDeleteAll = () => {
+        if(window.confirm("Are you sure want to delete All Note in Trash?")) {
+            deleteAllNote();
+        }
+    }
+
+    const deleteAllCheck = () => {
+        if (location.pathname === "/trash" && note.length !== 0) {
+            return (
+                <IconButton onClick={handleDeleteAll} edge="start" aria-label="deleteAll" className={classes.deleteAllButton} >
+                    <DeleteIcon /> <Typography>Delete All</Typography>
+                </IconButton>
+            )
+        } else {
+            return null;
+        }
+    }
 
     const homeCheck = () => {
         if (location.pathname === "/") {
@@ -82,6 +119,7 @@ const Navbar = () => {
                             <Link href="/" className={classes.titleLink} >NoteSup</Link>
                         </Typography>
                         { homeCheck() }
+                        { deleteAllCheck() }
                     </Toolbar>
                 </AppBar>
                 <AddNoteDialog open={open} setOpen={setOpen} />

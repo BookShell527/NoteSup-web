@@ -55,7 +55,7 @@ const AddNoteDialog: FC<Props> = ({ open, setOpen }) => {
     const [body, setBody] = useState("");
     const [color, setColor] = useState(0xFFCE93D8);
     const classes = useStyles();
-    const { addNote, currentUser } = useContext(context);
+    const { addNote } = useContext(context);
 
     const toColor = (num: number) => {
         num >>>= 0;
@@ -69,7 +69,7 @@ const AddNoteDialog: FC<Props> = ({ open, setOpen }) => {
             <DialogTitle id="dialog-title" >Add Note</DialogTitle>
                 <form className={classes.form} onSubmit={(e: FormEvent<HTMLFormElement>) => {
                     e.preventDefault();
-                    addNote(currentUser.uid, title, body, parseInt(color.toString()));
+                    addNote(title, body, parseInt(color.toString()));
                     setOpen(false);
                 }}>
                     <DialogContent className={classes.dialogContent} >

@@ -1,10 +1,7 @@
-import React, { FC, useContext } from 'react';
-import { context } from "../context/context";
+import React, { FC } from 'react';
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import Timeago from "react-timeago";
-import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -42,12 +39,6 @@ const NoteGrid: FC<Parameter> = ({ children, item }) => {
         return "rgba(" + [r, g, b, a].join(",") + ")";
     }
 
-    const toDateTime = (secs: number) => {
-        var t = new Date(1970, 0, 1); // Epoch
-        t.setSeconds(secs);
-        return t;
-    }
-
     const classes = useStyles();
 
     return (
@@ -59,7 +50,6 @@ const NoteGrid: FC<Parameter> = ({ children, item }) => {
                 </Typography>
             </Container>
             <Box display="flex" justifyContent="flex-end" className={classes.bottomRow} >
-                <Timeago date={toDateTime(item.createdDate.seconds)} style={{ marginRight: 5 }} />
                 { children }
             </Box>
         </Grid>
