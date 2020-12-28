@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import AuthRoute from "./page/AuthRoute";
 import NonAuthRoute from "./page/NonAuthRoute";
 import Navbar from './components/Navbar';
@@ -10,6 +10,7 @@ import Trash from './page/Note/Trash';
 import Login from './page/authentication/Login';
 import NavbarNote from "./components/NavbarNote";
 import Register from './page/authentication/Register';
+import Error from "./page/Note/Error";
 import Note from "./page/Note/Note";
 import "./App.css";
 import { ContextProvider } from './context/context';
@@ -31,6 +32,7 @@ const App: React.FC = () => {
                     <AuthRoute exact path="/contactus" component={ContactUs} />
                     <NonAuthRoute exact path="/login" component={Login} />
                     <NonAuthRoute exact path="/register" component={Register} />
+                    <Route component={Error} />
                 </Switch>
             </ContextProvider>
         </BrowserRouter>

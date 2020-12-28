@@ -13,6 +13,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddNoteDialog from "../../components/AddNoteDialog";
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -74,31 +75,41 @@ const Home = () => {
     if (!loading) {
         if (note.length === 0) {
             return (
-                <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
-                    <Typography variant="h1">No notes added</Typography>
-                </Grid>
+                <>
+                    <Helmet>
+                        <title>NoteSup | Home</title>
+                    </Helmet>
+                    <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
+                        <Typography variant="h1">No notes added</Typography>
+                    </Grid>
+                </>
             )
         } else {
             return (
-                <Grid className={classes.container} container>
-                    <CssBaseline />
-                    {
-                        note.map((m: any) => {
-                            return (
-                                <Fragment key={m.id}>
-                                    <NoteGrid item={m}>
-                                        <ZoomOutMapIcon className={classes.zoomIcon} onClick={() => window.location.href = `/note/${m.id}`} />
-                                        <EditIcon className={classes.editIcon} onClick={() => setOpen(true)} />
-                                        <ArchiveOutlinedIcon onClick={() => toggleArchived(m.id, m.archived)} className={classes.archivedIcon} />
-                                        <DeleteIcon className={classes.deleteIcon} onClick={() => toggleInTrash(m.id, m.inTrash)} />
-                                        { m.important ? <StarIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> : <StarBorderIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> }
-                                    </NoteGrid>
-                                    <AddNoteDialog open={open} setOpen={setOpen} edit={true} noteBody={m.body} noteColor={m.color} noteTitle={m.title} noteId={m.id} />
-                                </Fragment>
-                            )
-                        })
-                    }
-                </Grid>
+                <>
+                    <Helmet>
+                        <title>NoteSup | Home</title>
+                    </Helmet>
+                    <Grid className={classes.container} container>
+                        <CssBaseline />
+                        {
+                            note.map((m: any) => {
+                                return (
+                                    <Fragment key={m.id}>
+                                        <NoteGrid item={m}>
+                                            <ZoomOutMapIcon className={classes.zoomIcon} onClick={() => window.location.href = `/note/${m.id}`} />
+                                            <EditIcon className={classes.editIcon} onClick={() => setOpen(true)} />
+                                            <ArchiveOutlinedIcon onClick={() => toggleArchived(m.id, m.archived)} className={classes.archivedIcon} />
+                                            <DeleteIcon className={classes.deleteIcon} onClick={() => toggleInTrash(m.id, m.inTrash)} />
+                                            { m.important ? <StarIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> : <StarBorderIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> }
+                                        </NoteGrid>
+                                        <AddNoteDialog open={open} setOpen={setOpen} edit={true} noteBody={m.body} noteColor={m.color} noteTitle={m.title} noteId={m.id} />
+                                    </Fragment>
+                                )
+                            })
+                        }
+                    </Grid>
+                </>
             )
         }
     } else {

@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { context } from "../../context/context";
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -80,45 +81,50 @@ const ContactUs = () => {
     }
 
     return (
-        <Container component="main" maxWidth="xs" className={classes.container} >
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <Phone />
-                </Avatar>
-                <Typography component="h1" variant="h5">Contact Us</Typography>
-                <form className={classes.form} onSubmit={handleSend} >
-                    <TextField 
-                        variant="outlined" 
-                        margin="normal" 
-                        required 
-                        fullWidth 
-                        name="message" 
-                        label="Message"
-                        multiline
-                        rows={4}
-                        id="message" 
-                        autoComplete="current-message" 
-                        onChange={(e: ChangeEvent<HTMLTextAreaElement|HTMLInputElement>) => setMessage(e.target.value)} 
-                        InputLabelProps={{
-                            classes: {
-                                focused: classes.cssFocused,
-                            },
-                        }}
-                        InputProps={{
-                            classes: {
-                                root: classes.cssOutlinedInput,
-                                focused: classes.cssFocused,
-                                notchedOutline: classes.notchedOutline,
-                            },
-                            inputMode: "numeric"
-                        }}
-                    />
-                    {error && <h4 className={classes.centerAlign}>{error}</h4>}
-                    <Button className={classes.submit} disabled={loading} type="submit" fullWidth variant="contained" color="primary">Send Message</Button>
-                </form>
-            </div>
-        </Container>
+        <>
+            <Helmet>
+                <title>NoteSup | Contact Us</title>
+            </Helmet>
+            <Container component="main" maxWidth="xs" className={classes.container} >
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <Phone />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">Contact Us</Typography>
+                    <form className={classes.form} onSubmit={handleSend} >
+                        <TextField 
+                            variant="outlined" 
+                            margin="normal" 
+                            required 
+                            fullWidth 
+                            name="message" 
+                            label="Message"
+                            multiline
+                            rows={4}
+                            id="message" 
+                            autoComplete="current-message" 
+                            onChange={(e: ChangeEvent<HTMLTextAreaElement|HTMLInputElement>) => setMessage(e.target.value)} 
+                            InputLabelProps={{
+                                classes: {
+                                    focused: classes.cssFocused,
+                                },
+                            }}
+                            InputProps={{
+                                classes: {
+                                    root: classes.cssOutlinedInput,
+                                    focused: classes.cssFocused,
+                                    notchedOutline: classes.notchedOutline,
+                                },
+                                inputMode: "numeric"
+                            }}
+                        />
+                        {error && <h4 className={classes.centerAlign}>{error}</h4>}
+                        <Button className={classes.submit} disabled={loading} type="submit" fullWidth variant="contained" color="primary">Send Message</Button>
+                    </form>
+                </div>
+            </Container>
+        </>
     )
 }
 

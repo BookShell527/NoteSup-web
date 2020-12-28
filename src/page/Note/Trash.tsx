@@ -8,6 +8,7 @@ import NoteGrid from "../../components/NoteGrid";
 import { Typography } from '@material-ui/core';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -59,25 +60,35 @@ const Trash = () => {
     if (!loading) {
         if (note.length === 0) {
             return (
-                <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
-                    <Typography variant="h1">No notes moved to trash</Typography>
-                </Grid>
+                <>
+                    <Helmet>
+                        <title>NoteSup | Trash</title>
+                    </Helmet>
+                    <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
+                        <Typography variant="h1">No notes moved to trash</Typography>
+                    </Grid>
+                </>
             )
         } else {
             return (
-                <Grid className={classes.container} container>
-                    <CssBaseline />
-                    {
-                        note.map((m: any) => {
-                            return (
-                                <NoteGrid item={m} key={m.id} >
-                                    <DeleteIcon className={classes.deleteIcon} onClick={() => handleDelete(m)} />
-                                    <RestoreFromTrashIcon className={classes.restoreIcon} onClick={() => handleToggleInTrash(m)} />
-                                </NoteGrid>
-                            )
-                        })
-                    }
-                </Grid>
+                <>
+                    <Helmet>
+                        <title>NoteSup | Trash</title>
+                    </Helmet>
+                    <Grid className={classes.container} container>
+                        <CssBaseline />
+                        {
+                            note.map((m: any) => {
+                                return (
+                                    <NoteGrid item={m} key={m.id} >
+                                        <DeleteIcon className={classes.deleteIcon} onClick={() => handleDelete(m)} />
+                                        <RestoreFromTrashIcon className={classes.restoreIcon} onClick={() => handleToggleInTrash(m)} />
+                                    </NoteGrid>
+                                )
+                            })
+                        }
+                    </Grid>
+                </>
             )
         }
     } else {

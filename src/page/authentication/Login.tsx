@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { context } from "../../context/context";
 import GoogleButton from 'react-google-button';
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -99,80 +100,85 @@ export default function SignIn() {
     }
 
     return (
-        <Container component="main" maxWidth="xs" className={classes.container} >
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">Sign in</Typography>
-                <form className={classes.form} onSubmit={handleLogin} >
-                    <TextField 
-                        variant="outlined" 
-                        margin="normal" 
-                        required 
-                        fullWidth 
-                        id="email" 
-                        label="Email Address" 
-                        name="email" 
-                        autoComplete="email" 
-                        onChange={(e: ChangeEvent<HTMLTextAreaElement|HTMLInputElement>) => setEmail(e.target.value)} 
-                        autoFocus 
-                        InputLabelProps={{
-                            classes: {
-                                focused: classes.cssFocused,
-                            },
-                        }}
-                        InputProps={{
-                            classes: {
-                                root: classes.cssOutlinedInput,
-                                focused: classes.cssFocused,
-                                notchedOutline: classes.notchedOutline,
-                            },
-                            inputMode: "numeric"
-                        }}
-                    />
-                    <TextField 
-                        variant="outlined" 
-                        margin="normal" 
-                        required 
-                        fullWidth 
-                        name="password" 
-                        label="Password" 
-                        type="password" 
-                        id="password" 
-                        onChange={(e: ChangeEvent<HTMLTextAreaElement|HTMLInputElement>) => setPassword(e.target.value)} 
-                        autoComplete="current-password" 
-                        InputLabelProps={{
-                            classes: {
-                                focused: classes.cssFocused,
-                            },
-                        }}
-                        InputProps={{
-                            classes: {
-                                root: classes.cssOutlinedInput,
-                                focused: classes.cssFocused,
-                                notchedOutline: classes.notchedOutline,
-                            },
-                            inputMode: "numeric"
-                        }}
-                    />
-                    {error && <h4 className={classes.centerAlign}>{error}</h4>}
-                    <Button className={classes.submit} type="submit" disabled={loading} fullWidth variant="contained" color="primary">Sign In</Button>
-                    <GoogleButton
-                        className={classes.google}
-                        onClick={handleLoginGoogle}
-                    />
-                    <Grid container className={classes.grid} >
-                        <Grid item>
-                            <Link to="/register" className={classes.link} >{"Don't have an account? Register!"}</Link>
+        <>
+            <Helmet>
+                <title>NoteSup | Login</title>
+            </Helmet>
+            <Container component="main" maxWidth="xs" className={classes.container} >
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">Sign in</Typography>
+                    <form className={classes.form} onSubmit={handleLogin} >
+                        <TextField 
+                            variant="outlined" 
+                            margin="normal" 
+                            required 
+                            fullWidth 
+                            id="email" 
+                            label="Email Address" 
+                            name="email" 
+                            autoComplete="email" 
+                            onChange={(e: ChangeEvent<HTMLTextAreaElement|HTMLInputElement>) => setEmail(e.target.value)} 
+                            autoFocus 
+                            InputLabelProps={{
+                                classes: {
+                                    focused: classes.cssFocused,
+                                },
+                            }}
+                            InputProps={{
+                                classes: {
+                                    root: classes.cssOutlinedInput,
+                                    focused: classes.cssFocused,
+                                    notchedOutline: classes.notchedOutline,
+                                },
+                                inputMode: "numeric"
+                            }}
+                        />
+                        <TextField 
+                            variant="outlined" 
+                            margin="normal" 
+                            required 
+                            fullWidth 
+                            name="password" 
+                            label="Password" 
+                            type="password" 
+                            id="password" 
+                            onChange={(e: ChangeEvent<HTMLTextAreaElement|HTMLInputElement>) => setPassword(e.target.value)} 
+                            autoComplete="current-password" 
+                            InputLabelProps={{
+                                classes: {
+                                    focused: classes.cssFocused,
+                                },
+                            }}
+                            InputProps={{
+                                classes: {
+                                    root: classes.cssOutlinedInput,
+                                    focused: classes.cssFocused,
+                                    notchedOutline: classes.notchedOutline,
+                                },
+                                inputMode: "numeric"
+                            }}
+                        />
+                        {error && <h4 className={classes.centerAlign}>{error}</h4>}
+                        <Button className={classes.submit} type="submit" disabled={loading} fullWidth variant="contained" color="primary">Sign In</Button>
+                        <GoogleButton
+                            className={classes.google}
+                            onClick={handleLoginGoogle}
+                        />
+                        <Grid container className={classes.grid} >
+                            <Grid item>
+                                <Link to="/register" className={classes.link} >{"Don't have an account? Register!"}</Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </form>
-            </div>
-            <Box mt={3}>
-                <Copyright />
-            </Box>
-        </Container>
+                    </form>
+                </div>
+                <Box mt={3}>
+                    <Copyright />
+                </Box>
+            </Container>
+        </>
     );
 }

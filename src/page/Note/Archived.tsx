@@ -13,6 +13,7 @@ import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import AddNoteDialog from "../../components/AddNoteDialog";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -72,13 +73,21 @@ const Archived = () => {
     if (!loading) {
         if (note.length === 0) {
             return (
-                <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
-                    <Typography variant="h1">No notes archived</Typography>
-                </Grid>
+                <>
+                    <Helmet>
+                        <title>NoteSup | Archived</title>
+                    </Helmet>
+                    <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
+                        <Typography variant="h1">No notes archived</Typography>
+                    </Grid>
+                </>
             )
         } else {
             return (
                 <>
+                    <Helmet>
+                            <title>NoteSup | Archived</title>
+                    </Helmet>
                     <Grid className={classes.container} container>
                         <CssBaseline />
                         {

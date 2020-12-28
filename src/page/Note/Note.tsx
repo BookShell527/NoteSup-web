@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -43,14 +44,19 @@ const Note = (props: any) => {
     }, [])
 
     return (
-        <Grid container className={classes.container} >
-            <Container className={classes.titleContainer} >
-                <Typography variant="h2">{ note.title }</Typography>
-            </Container>
-            <Container>
-                <Typography className={classes.bodyContainer} variant="body1">{ note.body }</Typography>
-            </Container>
-        </Grid>
+        <>
+            <Helmet>
+                <title>NoteSup | Note</title>
+            </Helmet>
+            <Grid container className={classes.container} >
+                <Container className={classes.titleContainer} >
+                    <Typography variant="h2">{ note.title }</Typography>
+                </Container>
+                <Container>
+                    <Typography className={classes.bodyContainer} variant="body1">{ note.body }</Typography>
+                </Container>
+            </Grid>
+        </>
     )
 }
 
