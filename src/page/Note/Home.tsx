@@ -54,6 +54,7 @@ const Home = () => {
     const noteCollection = firestore.collection("note");
     const [note, setNote] = useState([]) as any;
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsub = noteCollection.orderBy("important", "desc").where("uid", "==", currentUser.uid).where("archived", "==", false).where("inTrash", "==", false).onSnapshot(snap => {
@@ -62,39 +63,46 @@ const Home = () => {
                 documents.push({ ...doc.data(), id: doc.id });
             });
             setNote(documents);
+            setLoading(false);
         });
+
         return () => unsub();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    console.log(loading);
 
-    if (note.length === 0) {
-        return (
-            <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
-                <Typography variant="h1">No notes added</Typography>
-            </Grid>
-        )
+    if (!loading) {
+        if (note.length === 0) {
+            return (
+                <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
+                    <Typography variant="h1">No notes added</Typography>
+                </Grid>
+            )
+        } else {
+            return (
+                <Grid className={classes.container} container>
+                    <CssBaseline />
+                    {
+                        note.map((m: any) => {
+                            return (
+                                <Fragment key={m.id}>
+                                    <NoteGrid item={m}>
+                                        <ZoomOutMapIcon className={classes.zoomIcon} onClick={() => window.location.href = `/note/${m.id}`} />
+                                        <EditIcon className={classes.editIcon} onClick={() => setOpen(true)} />
+                                        <ArchiveOutlinedIcon onClick={() => toggleArchived(m.id, m.archived)} className={classes.archivedIcon} />
+                                        <DeleteIcon className={classes.deleteIcon} onClick={() => toggleInTrash(m.id, m.inTrash)} />
+                                        { m.important ? <StarIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> : <StarBorderIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> }
+                                    </NoteGrid>
+                                    <AddNoteDialog open={open} setOpen={setOpen} edit={true} noteBody={m.body} noteColor={m.color} noteTitle={m.title} noteId={m.id} />
+                                </Fragment>
+                            )
+                        })
+                    }
+                </Grid>
+            )
+        }
     } else {
-        return (
-            <Grid className={classes.container} container>
-                <CssBaseline />
-                {
-                    note.map((m: any) => {
-                        return (
-                            <Fragment key={m.id}>
-                                <NoteGrid item={m}>
-                                    <ZoomOutMapIcon className={classes.zoomIcon} onClick={() => window.location.href = `/note/${m.id}`} />
-                                    <EditIcon className={classes.editIcon} onClick={() => setOpen(true)} />
-                                    <ArchiveOutlinedIcon onClick={() => toggleArchived(m.id, m.archived)} className={classes.archivedIcon} />
-                                    <DeleteIcon className={classes.deleteIcon} onClick={() => toggleInTrash(m.id, m.inTrash)} />
-                                    { m.important ? <StarIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> : <StarBorderIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> }
-                                </NoteGrid>
-                                <AddNoteDialog open={open} setOpen={setOpen} edit={true} noteBody={m.body} noteColor={m.color} noteTitle={m.title} noteId={m.id} />
-                            </Fragment>
-                        )
-                    })
-                }
-            </Grid>
-        )
+        return null;
     }
 }
 

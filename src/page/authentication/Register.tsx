@@ -66,6 +66,7 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -73,6 +74,9 @@ export default function SignIn() {
         try {
             if (password.length < 6) {
                 setError("Password must be 6+ character");
+                return;
+            } if (confirmPassword !== password) {
+                setError("Password doesn't match");
                 return;
             }
 
@@ -131,6 +135,31 @@ export default function SignIn() {
                         id="password" 
                         autoComplete="current-password" 
                         onChange={(e: ChangeEvent<HTMLTextAreaElement|HTMLInputElement>) => setPassword(e.target.value)} 
+                        InputLabelProps={{
+                            classes: {
+                                focused: classes.cssFocused,
+                            },
+                        }}
+                        InputProps={{
+                            classes: {
+                                root: classes.cssOutlinedInput,
+                                focused: classes.cssFocused,
+                                notchedOutline: classes.notchedOutline,
+                            },
+                            inputMode: "numeric"
+                        }}
+                    />
+                    <TextField 
+                        variant="outlined" 
+                        margin="normal" 
+                        required 
+                        fullWidth 
+                        name="confirm password" 
+                        label="Confirm Password" 
+                        type="password" 
+                        id="confirm password" 
+                        autoComplete="current-confirm password" 
+                        onChange={(e: ChangeEvent<HTMLTextAreaElement|HTMLInputElement>) => setConfirmPassword(e.target.value)} 
                         InputLabelProps={{
                             classes: {
                                 focused: classes.cssFocused,

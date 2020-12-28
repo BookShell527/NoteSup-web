@@ -31,6 +31,7 @@ const Trash = () => {
     const { toggleInTrash, deleteNote } = useContext(context);
     const noteCollection = firestore.collection("note");
     const [note, setNote] = useState([]) as any;
+    const [loading, setLoading] = useState(true);
 
     const handleToggleInTrash = async (item: any) => {
         await toggleInTrash(item.id, item.inTrash);
@@ -49,33 +50,38 @@ const Trash = () => {
                 documents.push({ ...doc.data(), id: doc.id });
             });
             setNote(documents);
+            setLoading(false);
         });
         return () => unsub();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    if (note.length === 0) {
-        return (
-            <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
-                <Typography variant="h1">No notes moved to trash</Typography>
-            </Grid>
-        )
+    if (!loading) {
+        if (note.length === 0) {
+            return (
+                <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
+                    <Typography variant="h1">No notes moved to trash</Typography>
+                </Grid>
+            )
+        } else {
+            return (
+                <Grid className={classes.container} container>
+                    <CssBaseline />
+                    {
+                        note.map((m: any) => {
+                            return (
+                                <NoteGrid item={m} key={m.id} >
+                                    <DeleteIcon className={classes.deleteIcon} onClick={() => handleDelete(m)} />
+                                    <RestoreFromTrashIcon className={classes.restoreIcon} onClick={() => handleToggleInTrash(m)} />
+                                </NoteGrid>
+                            )
+                        })
+                    }
+                </Grid>
+            )
+        }
     } else {
-        return (
-            <Grid className={classes.container} container>
-                <CssBaseline />
-                {
-                    note.map((m: any) => {
-                        return (
-                            <NoteGrid item={m} key={m.id} >
-                                <DeleteIcon className={classes.deleteIcon} onClick={() => handleDelete(m)} />
-                                <RestoreFromTrashIcon className={classes.restoreIcon} onClick={() => handleToggleInTrash(m)} />
-                            </NoteGrid>
-                        )
-                    })
-                }
-            </Grid>
-        )
+        return null;
     }
 }
 

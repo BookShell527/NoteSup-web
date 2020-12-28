@@ -79,7 +79,7 @@ export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
     }
 
     const sendMessage = async (message: string) => {
-        await firestore.collection("message").doc(currentUser.uid).set({
+        await firestore.collection("message").doc().set({
             email: currentUser.email,
             message
         })
