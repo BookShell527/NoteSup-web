@@ -28,10 +28,6 @@ const useStyles = makeStyles(() => ({
         overflowWrap: "break-word",
         height: 210,
     },
-    bottomRowIcon: {
-        color: "blue",
-        marginTop: -15
-    },
     bottomRow: {
         paddingLeft: 20,
         paddingRight: 20
@@ -39,8 +35,6 @@ const useStyles = makeStyles(() => ({
 }))
 
 const NoteGrid: FC<Parameter> = ({ children, item }) => {
-    const { toggleImportant } = useContext(context);
-
     const toColor = (num: number) => {
         num >>>= 0;
         const b = num & 0xFF, g = (num & 0xFF00) >>> 8, r = (num & 0xFF0000) >>> 16, a = ( (num & 0xFF000000) >>> 24 ) / 255;
@@ -52,10 +46,6 @@ const NoteGrid: FC<Parameter> = ({ children, item }) => {
         var t = new Date(1970, 0, 1); // Epoch
         t.setSeconds(secs);
         return t;
-    }
-
-    const handleToggle = async () => {
-        await toggleImportant(item.id, item.important);
     }
 
     const classes = useStyles();
@@ -70,9 +60,7 @@ const NoteGrid: FC<Parameter> = ({ children, item }) => {
             </Container>
             <Box display="flex" justifyContent="flex-end" className={classes.bottomRow} >
                 <Timeago date={toDateTime(item.createdDate.seconds)} style={{ marginRight: 5 }} />
-                <IconButton onClick={handleToggle} className={classes.bottomRowIcon}>
-                    { children }
-                </IconButton>
+                { children }
             </Box>
         </Grid>
     )

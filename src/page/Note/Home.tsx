@@ -7,22 +7,28 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import NoteGrid from "../../components/NoteGrid";
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
     container: {
         padding: "80px 10px 0 10px",
     },
-    bottomRowIcon: {
+    starIcon: {
         color: "blue",
-        marginTop: -7
+        marginTop: -15,
+        cursor: "pointer"
     },
 }))
 
 const Home = () => {
     const classes = useStyles();
-    const { currentUser } = useContext(context);
+    const { currentUser, toggleImportant } = useContext(context);
     const noteCollection = firestore.collection("note");
     const [note, setNote] = useState([]) as any;
+
+    const handleToggle = async (item: any) => {
+        await toggleImportant(item.id, item.important);
+    }
 
     useEffect(() => {
         const unsub = noteCollection.orderBy("important", "desc").where("uid", "==", currentUser.uid).where("archived", "==", false).where("inTrash", "==", false).onSnapshot(snap => {
@@ -33,25 +39,31 @@ const Home = () => {
             setNote(documents);
         });
         return () => unsub();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return (
-        <>
+    if (note.length === 0) {
+        return (
+            <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
+                <Typography variant="h1">No notes added</Typography>
+            </Grid>
+        )
+    } else {
+        return (
             <Grid className={classes.container} container>
                 <CssBaseline />
                 {
                     note.map((m: any) => {
                         return (
-                            <NoteGrid item={m} >
-                                { m.important ? <StarIcon /> : <StarBorderIcon /> }
+                            <NoteGrid item={m} key={m.id} >
+                                { m.important ? <StarIcon onClick={() => handleToggle(m)} className={classes.starIcon} /> : <StarBorderIcon onClick={() => handleToggle(m)} className={classes.starIcon} /> }
                             </NoteGrid>
                         )
                     })
                 }
             </Grid>
-        </>
-    )
+        )
+    }
 }
 
 export default Home

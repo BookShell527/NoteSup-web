@@ -9,10 +9,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Copyright from "../../components/Copyright"
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { context } from "../../context/context";
 import GoogleButton from 'react-google-button';
+import { useHistory, Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -72,6 +72,7 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
+    const history = useHistory();
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -80,7 +81,7 @@ export default function SignIn() {
             setError("");
             setLoading(true);
             await login(email, password);
-            window.location.href = "/";
+            history.push("/");
         } catch {
             setLoading(false);
             setError("Failed to login");
@@ -165,7 +166,7 @@ export default function SignIn() {
                     />
                     <Grid container className={classes.grid} >
                         <Grid item>
-                            <Link href="/register" className={classes.link} >{"Don't have an account? Register!"}</Link>
+                            <Link to="/register" className={classes.link} >{"Don't have an account? Register!"}</Link>
                         </Grid>
                     </Grid>
                 </form>

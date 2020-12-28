@@ -9,10 +9,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Copyright from "../../components/Copyright"
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { useContext } from 'react';
 import { context } from '../../context/context';
+import { useHistory, Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -66,6 +66,7 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
+    const history = useHistory();
 
     const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -79,7 +80,7 @@ export default function SignIn() {
             setError("");
             setLoading(true);
             await register(email, password);
-            window.location.href = "/";
+            history.push("/");
         } catch {
             setLoading(false);
             setError("Failed Registering User");
@@ -149,7 +150,7 @@ export default function SignIn() {
                     <Button className={classes.submit} disabled={loading} type="submit" fullWidth variant="contained" color="primary">Sign In</Button>
                     <Grid container>
                         <Grid item>
-                            <Link href="/login" className={classes.link}>{"Already have an account? Login!"}</Link>
+                            <Link to="/login" className={classes.link}>{"Already have an account? Login!"}</Link>
                         </Grid>
                     </Grid>
                 </form>

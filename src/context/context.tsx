@@ -9,7 +9,7 @@ interface ContextParameter {
 }
 
 export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null) as any;
     const [loading, setLoading] = useState(true);
     const noteCollection = firestore.collection("note");
 
@@ -34,6 +34,10 @@ export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
         await noteCollection.doc(docId).update({ important: !important });
     }
 
+    const toggleArchived = async (docId: string, archived: boolean) => {
+        await noteCollection.doc(docId).update({ archived: !archived });
+    }
+
     const addNote = async (uid: string, title: string, body: string, color: number) => {
         await noteCollection.doc().set({
             uid,
@@ -44,6 +48,13 @@ export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
             inTrash: false,
             archived: false,
             createdDate: Date.now()
+        })
+    }
+
+    const sendMessage = async (message: string) => {
+        await firestore.collection("message").doc(currentUser.uid).set({
+            email: currentUser.email,
+            message
         })
     }
 
@@ -63,7 +74,9 @@ export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
             register,
             loginGoogle,
             toggleImportant,
-            addNote()
+            addNote,
+            sendMessage,
+            toggleArchived
         }}>
             { !loading && children }
         </context.Provider>
