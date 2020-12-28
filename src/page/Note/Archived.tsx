@@ -86,7 +86,7 @@ const Archived = () => {
             return (
                 <>
                     <Helmet>
-                            <title>NoteSup | Archived</title>
+                        <title>NoteSup | Archived</title>
                     </Helmet>
                     <Grid className={classes.container} container>
                         <CssBaseline />
@@ -111,7 +111,11 @@ const Archived = () => {
             )
         }
     } else {
-        return null;
+        return (
+            <Helmet>
+                <title>NoteSup | Archived</title>
+            </Helmet>
+        );
     }
 }
 

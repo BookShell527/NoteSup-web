@@ -70,7 +70,6 @@ const Home = () => {
         return () => unsub();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    console.log(loading);
 
     if (!loading) {
         if (note.length === 0) {
@@ -113,7 +112,11 @@ const Home = () => {
             )
         }
     } else {
-        return null;
+        return (
+            <Helmet>
+                <title>NoteSup | Home</title>
+            </Helmet>
+        );
     }
 }
 

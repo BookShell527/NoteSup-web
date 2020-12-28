@@ -24,8 +24,7 @@ const App: React.FC = () => {
                     <AuthRoute exact path="/note/:id" component={NavbarNote} />
                 </Switch>
                 <Switch>
-                    <AuthRoute exact path="/" component={Home} />
-                    <AuthRoute exact path="/note" component={Home} />
+                    <AuthRoute exact path={["/", "/note"]} component={Home} />
                     <AuthRoute exact path="/note/:id" component={Note} />
                     <AuthRoute exact path="/trash" component={Trash} />
                     <AuthRoute exact path="/archived" component={Archived} />

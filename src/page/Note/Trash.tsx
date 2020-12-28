@@ -92,7 +92,11 @@ const Trash = () => {
             )
         }
     } else {
-        return null;
+        return (
+            <Helmet>
+                <title>NoteSup | Trash</title>
+            </Helmet>
+        );
     }
 }
 
