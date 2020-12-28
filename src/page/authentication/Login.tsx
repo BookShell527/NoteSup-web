@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useState, FormEvent, useEffect } from 'react';
+import React, { ChangeEvent, useContext, useState, FormEvent } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -67,17 +67,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
     const classes = useStyles();
-    const { login, currentUser, loginGoogle }  = useContext(context); 
+    const { login, loginGoogle }  = useContext(context); 
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
-
-    useEffect(() => {
-        if (currentUser !== null) {
-            window.location.href = "/";
-        }
-    })
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();

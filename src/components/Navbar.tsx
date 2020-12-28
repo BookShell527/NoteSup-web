@@ -9,6 +9,9 @@ import Link from "@material-ui/core/Link";
 import SwipeableDrawer from '@material-ui/core/Drawer';
 import DrawerList from './DrawerList';
 import { context } from "../context/context";
+import AddIcon from '@material-ui/icons/Add';
+import { useLocation } from 'react-router-dom';
+import AddNoteDialog from "./AddNoteDialog";
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -25,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         background: "purple"
+    },
+    addButton: {
+        color: "white"
     }
 }));
 
@@ -32,9 +38,10 @@ type Anchor = "left"
 
 const Navbar = () => {
     const classes = useStyles();
-    const [state, setState] = useState({left: false,});
+    const [state, setState] = useState({left: false});
     const { currentUser } = useContext(context);
-    console.log(currentUser);
+    const [open, setOpen] = useState(false);
+    const location = useLocation();
 
     const toggleDrawer = (anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (event && event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
@@ -43,26 +50,42 @@ const Navbar = () => {
         setState({ ...state, [anchor]: open });
     };
 
+    const homeCheck = () => {
+        if (location.pathname === "/") {
+            return (
+                <IconButton onClick={() => setOpen(true)} edge="start" aria-label="add" className={classes.addButton} >
+                    <AddIcon /> <Typography>Add Note</Typography>
+                </IconButton>
+            )
+        } else {
+            return null;
+        }
+    }
+
     if (currentUser === null) {
         return null;
     } else {
         return (
-            <AppBar position="fixed" className={classes.root} >
-                <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={toggleDrawer("left", true)} >
-                        <MenuIcon />
-                    </IconButton>
-                    <SwipeableDrawer anchor={"left"}
-                        open={state["left"]}
-                        onClose={toggleDrawer("left", false)}
-                    >
-                        {<DrawerList anchor="left" />}
-                    </SwipeableDrawer>
-                    <Typography variant="h6" className={classes.title}>
-                        <Link href="/" className={classes.titleLink} >NoteSup</Link>
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <>
+                <AppBar position="fixed" className={classes.root} >
+                    <Toolbar>
+                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={toggleDrawer("left", true)} >
+                            <MenuIcon />
+                        </IconButton>
+                        <SwipeableDrawer anchor={"left"}
+                            open={state["left"]}
+                            onClose={toggleDrawer("left", false)}
+                        >
+                            {<DrawerList anchor="left" />}
+                        </SwipeableDrawer>
+                        <Typography variant="h6" className={classes.title}>
+                            <Link href="/" className={classes.titleLink} >NoteSup</Link>
+                        </Typography>
+                        { homeCheck() }
+                    </Toolbar>
+                </AppBar>
+                <AddNoteDialog open={open} setOpen={setOpen} />
+            </>
         )
     }
 }

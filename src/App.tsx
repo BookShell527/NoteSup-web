@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
+import AuthRoute from "./page/AuthRoute";
+import NonAuthRoute from "./page/NonAuthRoute";
 import Navbar from './components/Navbar';
 import Archived from './page/Note/Archived';
 import ContactUs from './page/Note/ContactUs';
@@ -16,12 +18,12 @@ const App: React.FC = () => {
             <ContextProvider>
                 <Navbar />
                 <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/trash" component={Trash} />
-                    <Route exact path="/archived" component={Archived} />
-                    <Route exact path="/contactus" component={ContactUs} />
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/register" component={Register} />
+                    <AuthRoute exact path="/" component={Home} />
+                    <AuthRoute exact path="/trash" component={Trash} />
+                    <AuthRoute exact path="/archived" component={Archived} />
+                    <AuthRoute exact path="/contactus" component={ContactUs} />
+                    <NonAuthRoute exact path="/login" component={Login} />
+                    <NonAuthRoute exact path="/register" component={Register} />
                 </Switch>
             </ContextProvider>
         </BrowserRouter>

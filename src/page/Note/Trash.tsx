@@ -1,15 +1,6 @@
-import React, { useEffect, useContext } from 'react';
-import { context } from "../../context/context";
+import React from 'react';
 
 const Trash = () => {
-    const { currentUser } = useContext(context);
-
-    useEffect(() => {
-        if (currentUser === null) {
-            window.location.href = "login";
-        }
-    })
-
     return (
         <div>
             
