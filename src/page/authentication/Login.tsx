@@ -12,7 +12,7 @@ import Copyright from "../../components/Copyright"
 import Typography from '@material-ui/core/Typography';
 import { context } from "../../context/context";
 import GoogleButton from 'react-google-button';
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -72,7 +72,6 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
-    const history = useHistory();
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -81,7 +80,7 @@ export default function SignIn() {
             setError("");
             setLoading(true);
             await login(email, password);
-            history.push("/");
+            window.location.href = "/";
         } catch {
             setLoading(false);
             setError("Failed to login");

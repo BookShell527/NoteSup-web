@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
         color: "red",
         marginTop: -15,
         cursor: "pointer",
-        marginRight: 15
+        marginRight: 10
     }
 }))
 
@@ -37,7 +37,9 @@ const Trash = () => {
     }
 
     const handleDelete = async (item: any) => {
-        await deleteNote(item.id);
+        if (window.confirm("Are you sure want to delete this item?")) {
+            await deleteNote(item.id);
+        }
     }
 
     useEffect(() => {

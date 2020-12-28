@@ -58,6 +58,14 @@ export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
         })
     }
 
+    const editNote = async (id: string, title: string, body: string, color: number) => {
+        await noteCollection.doc(id).update({
+            title,
+            body,
+            color
+        })
+    }
+
     const addNote = async (title: string, body: string, color: number) => {
         await noteCollection.doc().set({
             uid: currentUser.uid,
@@ -98,7 +106,8 @@ export const ContextProvider: FC<ContextParameter> = memo(({ children }) => {
             toggleArchived,
             toggleInTrash,
             deleteNote,
-            deleteAllNote
+            deleteAllNote,
+            editNote
         }}>
             { !loading && children }
         </context.Provider>

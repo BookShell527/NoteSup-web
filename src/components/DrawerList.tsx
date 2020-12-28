@@ -74,7 +74,7 @@ const DrawerList: FC<Parameter> = ({ anchor }) => {
                 <ListItemTile text="Home" icon={HomeIcon} link="/" />
                 <ListItemTile text="Archived" icon={ArchiveIcon} link="/archived" />
                 <ListItemTile text="Trash" icon={DeleteIcon} link="/trash" />
-                <ListItemTile text="ContactUs" icon={PhoneIcon} link="/contactus" />
+                <ListItemTile text="Contact Us" icon={PhoneIcon} link="/contactus" />
             </List>
             <Divider />
             <List>

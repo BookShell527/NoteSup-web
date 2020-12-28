@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
         border: "1px solid #eee",
         borderRadius: 10,
         height: 300,
-        marginRight: 10,
+        // marginRight: 10,
     },
     noteTitle: {
         textAlign: "center"
@@ -40,9 +40,8 @@ const NoteGrid: FC<Parameter> = ({ children, item }) => {
     }
 
     const classes = useStyles();
-
     return (
-        <Grid key={item.id} className={classes.note} xs={5} lg={3} xl={2} item style={{ background: toColor(item.color) }} >
+        <Grid key={item.id} className={classes.note} xs={6} lg={3} xl={2} item style={{ background: toColor(item.color) }} >
             <h4 className={classes.noteTitle} >{item.title}</h4>
             <Container className={classes.noteBody}>
                 <Typography display="inline">

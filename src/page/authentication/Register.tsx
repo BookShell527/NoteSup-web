@@ -12,7 +12,7 @@ import Copyright from "../../components/Copyright"
 import Typography from '@material-ui/core/Typography';
 import { useContext } from 'react';
 import { context } from '../../context/context';
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -66,7 +66,6 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
-    const history = useHistory();
 
     const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -80,7 +79,7 @@ export default function SignIn() {
             setError("");
             setLoading(true);
             await register(email, password);
-            history.push("/");
+            window.location.href = "/";
         } catch {
             setLoading(false);
             setError("Failed Registering User");

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, Fragment } from 'react';
 import { context } from "../../context/context";
 import { firestore } from "../../firebase";
 import Grid from "@material-ui/core/Grid";
@@ -9,6 +9,10 @@ import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import { Typography } from '@material-ui/core';
+import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
+import AddNoteDialog from "../../components/AddNoteDialog";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -23,23 +27,33 @@ const useStyles = makeStyles(() => ({
         color: "green",
         marginTop: -15,
         cursor: "pointer",
-        marginRight: 15
+        marginRight: 10
+    },
+    zoomIcon: {
+        marginTop: -15, 
+        marginRight: 10, 
+        cursor: "pointer"
+    },
+    deleteIcon: {
+        color: "red",
+        marginTop: -15,
+        cursor: "pointer",
+        marginRight: 10
+    },
+    editIcon: {
+        color: "orange",
+        marginTop: -15,
+        cursor: "pointer",
+        marginRight: 10
     }
 }))
 
 const Archived = () => {
     const classes = useStyles();
-    const { currentUser, toggleImportant, toggleArchived } = useContext(context);
+    const { currentUser, toggleImportant, toggleArchived, toggleInTrash } = useContext(context);
     const noteCollection = firestore.collection("note");
     const [note, setNote] = useState([]) as any;
-
-    const handleToggleImportant = async (item: any) => {
-        await toggleImportant(item.id, item.important);
-    }
-
-    const handleToggleArchived = async (item: any) => {
-        await toggleArchived(item.id, item.archived)
-    }
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const unsub = noteCollection.orderBy("important", "desc").where("uid", "==", currentUser.uid).where("archived", "==", true).where("inTrash", "==", false).onSnapshot(snap => {
@@ -61,19 +75,27 @@ const Archived = () => {
         )
     } else {
         return (
-            <Grid className={classes.container} container>
-                <CssBaseline />
-                {
-                    note.map((m: any) => {
-                        return (
-                            <NoteGrid item={m} key={m.id} >
-                                <ArchiveIcon onClick={() => handleToggleArchived(m)} className={classes.archivedIcon} />
-                                { m.important ? <StarIcon onClick={() => handleToggleImportant(m)} className={classes.starIcon} /> : <StarBorderIcon onClick={() => handleToggleImportant(m)} className={classes.starIcon} /> }
-                            </NoteGrid>
-                        )
-                    })
-                }
-            </Grid>
+            <>
+                <Grid className={classes.container} container>
+                    <CssBaseline />
+                    {
+                        note.map((m: any) => {
+                            return (
+                                <Fragment key={m.id}>
+                                    <NoteGrid item={m} >
+                                        <ZoomOutMapIcon className={classes.zoomIcon} onClick={() => window.location.href = `/note/${m.id}`} />
+                                        <EditIcon className={classes.editIcon} onClick={() => setOpen(true)} />
+                                        <ArchiveIcon onClick={() => toggleArchived(m.id, m.archived)} className={classes.archivedIcon} />
+                                        <DeleteIcon className={classes.deleteIcon} onClick={() => toggleInTrash(m.id, m.inTrash)} />
+                                        { m.important ? <StarIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> : <StarBorderIcon onClick={() => toggleImportant(m.id, m.important)} className={classes.starIcon} /> }
+                                    </NoteGrid>
+                                    <AddNoteDialog open={open} setOpen={setOpen} edit={true} noteBody={m.body} noteColor={m.color} noteTitle={m.title} noteId={m.id} />
+                                </Fragment>
+                            )
+                        })
+                    }
+                </Grid>
+            </>
         )
     }
 }

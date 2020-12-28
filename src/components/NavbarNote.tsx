@@ -8,13 +8,15 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SwipeableDrawer from '@material-ui/core/Drawer';
 import DrawerList from './DrawerList';
 import { context } from "../context/context";
-import AddIcon from '@material-ui/icons/Add';
-import { useLocation } from 'react-router-dom';
 import AddNoteDialog from "./AddNoteDialog";
 import { firestore } from "../firebase";
 import DeleteIcon from '@material-ui/icons/Delete';
-import { withRouter } from "react-router-dom";
 import Link from "@material-ui/core/Link";
+import ArchiveIcon from "@material-ui/icons/Archive";
+import EditIcon from "@material-ui/icons/Edit";
+import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -32,36 +34,38 @@ const useStyles = makeStyles((theme) => ({
     root: {
         background: "purple"
     },
-    addButton: {
-        color: "white"
-    },
-    deleteAllButton: {
+    deleteButton: {
         color: "red"
+    },
+    archivedButton: {
+        color: "green"
+    },
+    importantButton: {
+        color: "blue"
+    },
+    editButton: {
+        color: "orange"
     }
 }));
 
 type Anchor = "left"
 
-const Navbar = () => {
+const NavbarNote = (props: any) => {
     const classes = useStyles();
     const [state, setState] = useState({left: false});
-    const { deleteAllNote } = useContext(context);
+    const { toggleInTrash, toggleArchived, toggleImportant } = useContext(context);
     const [open, setOpen] = useState(false);
-    const location = useLocation();
     const noteCollection = firestore.collection("note");
     const [note, setNote] = useState([]) as any;
 
     useEffect(() => {
-        const unsub = noteCollection.where("inTrash", "==", true).onSnapshot(snap => {
-            let documents: any[] = [];
-            snap.forEach((doc: any) => {
-                documents.push({ ...doc.data(), id: doc.id });
-            });
-            setNote(documents);
-        });
+        const unsub = noteCollection.doc(props.match.params.id).onSnapshot((snap) => {
+            setNote({...snap.data(), id: snap.id});
+        })
+
         return () => unsub();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [])
 
     const toggleDrawer = (anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (event && event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
@@ -70,34 +74,9 @@ const Navbar = () => {
         setState({ ...state, [anchor]: open });
     };
 
-    const deleteAllCheck = () => {
-        const handleDeleteAll = async () => {
-            if (window.confirm("Are you sure want to delete All Note in Trash?")) {
-                await deleteAllNote();
-            }
-        }
-
-        if (location.pathname === "/trash" && note.length !== 0) {
-            return (
-                <IconButton onClick={handleDeleteAll} edge="start" aria-label="deleteAll" className={classes.deleteAllButton} >
-                    <DeleteIcon /> <Typography>Delete All</Typography>
-                </IconButton>
-            )
-        } else {
-            return null;
-        }
-    }
-
-    const homeCheck = () => {
-        if (location.pathname === "/") {
-            return (
-                <IconButton onClick={() => setOpen(true)} edge="start" aria-label="add" className={classes.addButton} >
-                    <AddIcon />
-                </IconButton>
-            )
-        } else {
-            return null;
-        }
+    const handleToggleInTrash = async () => {
+        await toggleInTrash(note.id, note.inTrash);
+        window.location.href = "/";
     }
 
     return (
@@ -116,13 +95,23 @@ const Navbar = () => {
                     <Typography variant="h6" className={classes.title}>
                         <Link href="/" className={classes.titleLink} >NoteSup</Link>
                     </Typography>
-                    { homeCheck() }
-                    { deleteAllCheck() }
+                    <IconButton onClick={() => setOpen(true)} edge="start" aria-label="edit" className={classes.editButton} >
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={handleToggleInTrash} edge="start" aria-label="deleteAll" className={classes.deleteButton} >
+                        <DeleteIcon />
+                    </IconButton>
+                    <IconButton onClick={() => toggleImportant(note.id, note.important)} edge="start" aria-label="important" className={classes.importantButton} >
+                        { note.important ? <StarIcon /> : <StarBorderIcon /> }
+                    </IconButton>
+                    <IconButton onClick={() => toggleArchived(note.id, note.archived)} edge="start" aria-label="archived" className={classes.archivedButton} >
+                        { note.archived ? <ArchiveIcon /> : <ArchiveOutlinedIcon /> }
+                    </IconButton>
+                    <AddNoteDialog open={open} setOpen={setOpen} edit={true} noteBody={note.body} noteColor={note.color} noteTitle={note.title} noteId={note.id} />
                 </Toolbar>
             </AppBar>
-            <AddNoteDialog open={open} setOpen={setOpen} edit={false} />
         </>
     )
 }
 
-export default withRouter(Navbar);
+export default NavbarNote;

@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { context } from "../../context/context";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -65,7 +64,6 @@ const ContactUs = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const { sendMessage } = useContext(context);
-    const history = useHistory();
 
     const handleSend = async (e: FormEvent) => {
         e.preventDefault();
@@ -74,7 +72,7 @@ const ContactUs = () => {
             setError("");
             setLoading(true);
             await sendMessage(message);
-            history.push("/");
+            window.location.href = "/";
         } catch {
             setLoading(false);
             setError("Failed Registering User");
