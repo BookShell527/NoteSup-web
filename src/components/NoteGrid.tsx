@@ -41,7 +41,7 @@ const NoteGrid: FC<Parameter> = ({ children, item }) => {
 
     const classes = useStyles();
     return (
-        <Grid key={item.id} className={classes.note} xs={6} lg={3} xl={2} item style={{ background: toColor(item.color) }} >
+        <Grid key={item.id} className={classes.note} xs={12} md={4} lg={3} xl={2} item style={{ background: toColor(item.color) }} >
             <h4 className={classes.noteTitle} >{item.title}</h4>
             <Container className={classes.noteBody}>
                 <Typography display="inline">

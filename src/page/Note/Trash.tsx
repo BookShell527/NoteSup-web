@@ -65,7 +65,7 @@ const Trash = () => {
                         <title>NoteSup | Trash</title>
                     </Helmet>
                     <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
-                        <Typography variant="h1">No notes moved to trash</Typography>
+                        <Typography variant="h5">No notes moved to trash</Typography>
                     </Grid>
                 </>
             )

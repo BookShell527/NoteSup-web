@@ -79,7 +79,7 @@ const Home = () => {
                         <title>NoteSup | Home</title>
                     </Helmet>
                     <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
-                        <Typography variant="h1">No notes added</Typography>
+                        <Typography variant="h5">No notes added</Typography>
                     </Grid>
                 </>
             )

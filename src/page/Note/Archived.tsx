@@ -78,7 +78,7 @@ const Archived = () => {
                         <title>NoteSup | Archived</title>
                     </Helmet>
                     <Grid container direction="column" alignItems="center" justify="center" style={{ minHeight: "100vh" }}>
-                        <Typography variant="h1">No notes archived</Typography>
+                        <Typography variant="h5">No notes archived</Typography>
                     </Grid>
                 </>
             )
